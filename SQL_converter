@@ -1,0 +1,19 @@
+import pandas as pd
+import sqlite3
+
+# 1. Load your final merged CSV
+df = pd.read_csv('AITUCAP_Final_Database.csv')
+
+# 2. Connect to (or create) the SQLite database file
+conn = sqlite3.connect('movies.db')
+
+# 3. Convert CSV to SQL table
+# 'movies' is the name of the table, 'if_exists' replaces old data
+df.to_sql('movies', conn, if_exists='replace', index=False)
+
+# 4. (Pro Move) Add an Index on the "Movie Name" column
+# This makes searching 10,000 movies instant
+conn.execute('CREATE INDEX idx_movie_name ON movies ("Movie Name")')
+
+conn.close()
+print("🎉 Success! Your SQL database 'movies.db' is ready.")
