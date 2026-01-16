@@ -2,8 +2,10 @@ import pandas as pd
 import sqlite3
 
 df = pd.read_csv('AITUCAP_Final_Database.csv')
+
+# 2. Connect to (or create) the SQLite database file
 conn = sqlite3.connect('movies.db')
 df.to_sql('movies', conn, if_exists='replace', index=False)
 conn.execute('CREATE INDEX idx_movie_name ON movies ("Movie Name")')
 conn.close()
-print("🎉 Success! Your SQL database 'movies.db' is ready.")
+print("worked")
