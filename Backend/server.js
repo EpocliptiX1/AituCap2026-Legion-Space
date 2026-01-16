@@ -3,8 +3,10 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const fetch = require('node-fetch');
 
 const app = express();
+const YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwH2fqak';
 
 // --- 1. MIDDLEWARE ---
 app.use(cors());
@@ -185,7 +187,36 @@ app.post('/movies/get-list', (req, res) => {
 });
 
 // =========================================
-//  7. REVIEW ROUTES (JSON File)
+//  7. YOUTUBE TRAILER SEARCH (API)
+// =========================================
+app.get('/youtube/search', async (req, res) => {
+    const movieName = req.query.name;
+    if (!movieName) return res.status(400).json({ error: "Movie name required" });
+    
+    try {
+        const query = encodeURIComponent(movieName + " official trailer");
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&maxResults=1&type=video&key=${YT_API_KEY}`;
+        console.log(`[YouTube] Searching: ${movieName}`);
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Log full response for debugging
+        if (!response.ok || data.error) {
+            console.error(`[YouTube] API Error:`, data);
+            return res.status(response.status || 500).json({ error: data.error || "YouTube API error" });
+        }
+        
+        const videoId = data.items?.[0]?.id?.videoId || "";
+        console.log(`[YouTube] Found video: ${videoId || "None"}`);
+        res.json({ videoId });
+    } catch (err) {
+        console.error("[YouTube] Network error:", err);
+        res.status(500).json({ error: "Could not fetch trailer" });
+    }
+});
+
+// =========================================
+//  8. REVIEW ROUTES (JSON File)
 // =========================================
 
 // Get all reviews
@@ -219,7 +250,7 @@ app.post('/reviews', (req, res) => {
 });
 
 // =========================================
-//  8. START SERVER
+//  9. START SERVER
 // =========================================
 const PORT = 3000;
 app.listen(PORT, () => {
