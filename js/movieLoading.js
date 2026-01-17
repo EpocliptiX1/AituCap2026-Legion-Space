@@ -3,15 +3,13 @@
 */
 
 // 1. GLOBAL CONFIGURATION
-// window.YT_API_KEY = 'CHECK README.md FOR KEY';
-window.YT_API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwH2fqak';
+window.YT_API_KEY = 'CHECK README.md FOR KEY';
 let currentPlaylist = []; 
 let activeTrailerIdx = -1; 
  
 // 2. GLOBAL TRAILER FETCHER (Used by this file AND mainPageControls.js)
 window.fetchYTId = async function(name) {
-    const API_KEY = 'AIzaSyB6Gco_FfC6l4AH5xLnEU2To8jaUwH2fqak'; 
-    // const API_KEY = 'CHECK README.md FOR KEY'; 
+    const API_KEY = 'CHECK README.md FOR KEY'; 
     try {
         const query = encodeURIComponent(name + " official trailer");
         const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&maxResults=1&type=video&key=${API_KEY}`);

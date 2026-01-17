@@ -6,7 +6,7 @@ let currentSlide = 0;
 
 async function initHero() {
     try {
-        const response = await fetch('http://localhost:3000/movies/library?limit=5&sort=rating_desc');
+        const response = await fetch('http://localhost:3000/movies/library?limit=5&sort=date_desc');
         const movies = await response.json();
 
         heroMovies = movies.map(movie => ({
@@ -28,6 +28,7 @@ async function initHero() {
     } catch (err) {
         console.error("Hero Init Error:", err);
     }
+    
 }
 
 async function updateHero() {
@@ -1214,3 +1215,48 @@ window.submitReview = async function() {
 
     burger.classList.toggle('toggle-burger');
 };
+/* =========================================
+   MOBILE SWIPE LOGIC (Global Scope)
+   ========================================= */
+
+window.moveSlide = function(direction) {
+    if (heroMovies.length === 0) return;
+
+    currentSlide += direction;
+
+    if (currentSlide >= heroMovies.length) {
+        currentSlide = 0; // Go back to the first movie
+    } else if (currentSlide < 0) {
+        currentSlide = heroMovies.length - 1; // Go to the last movie
+    }
+
+    updateHero(); 
+    updateDots();
+};
+let touchStartX = 0;
+let touchEndX = 0;
+
+function handleSwipe() {
+    const swipeThreshold = 50; 
+    const change = touchStartX - touchEndX;
+
+    if (change > swipeThreshold) {
+        moveSlide(1); 
+    } else if (change < -swipeThreshold) {
+        moveSlide(-1); 
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const heroSection = document.querySelector('.hero');
+    if (heroSection) {
+        heroSection.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        heroSection.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
+});
