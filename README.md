@@ -9,7 +9,7 @@
 The system is built on a **decoupled architecture**: a Node.js/Express backend serving a REST API, and a Vanilla JavaScript frontend that consumes this API to render dynamic content.
 
 
-### (fyi there is a 2nd ver of this pro0ject that can be uploaded to render (web hoster), slightly older version though)
+### (fyi there is a 2nd ver of this project that can be uploaded to render (web hoster), slightly older version though)
 ---
 
 ## 2. Technology Stack
