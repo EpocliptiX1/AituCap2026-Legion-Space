@@ -7,6 +7,8 @@
 **Legion Space** is a full-stack, cinematography-focused movie database and streaming preview platform. Unlike generic movie sites, it focuses on technical presentation (aspect ratios, high-bitrate aesthetics) and a "Premium" user experience.
 
 The system is built on a **decoupled architecture**: a Node.js/Express backend serving a REST API, and a Vanilla JavaScript frontend that consumes this API to render dynamic content.
+
+
 (fyi there is a 2nd ver of this pro0ject that can be uploaded to render (web hoster), slightly older version though)
 ---
 
